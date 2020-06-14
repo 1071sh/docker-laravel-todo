@@ -6,12 +6,16 @@ use App\Folder;
 use App\Http\Requests\CreateTask;
 use App\Http\Requests\EditTask;
 use App\Task;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     public function index(int $id)
     {
+        // ユーザーのフォルダを取得する
+        $folders = Auth::user()->folders()->get();
+
         // すべてのフォルダを取得する
         $folders = Folder::all();
 
@@ -38,7 +42,7 @@ class TaskController extends Controller
     public function create(int $id, CreateTask $request)
     {
         $current_folder = Folder::find($id);
-        //タスクモデルのインスタンスを作成する
+
         $task = new Task();
         $task->title = $request->title;
         $task->due_date = $request->due_date;
